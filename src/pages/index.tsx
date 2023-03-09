@@ -7,16 +7,20 @@ import { api } from "~/utils/api";
 import React, { useState } from "react";
 
 const Home: NextPage = () => {
- // const hello = api.example.hello.useQuery({ text: "from tRPC" });
+ const createBuildMutation = api.builds.createBuild.useMutation();
   
   
   const [buildOrder, setBuildOrder] = useState("");
   const [MatchUp, setMatchUp] = useState("ZvT");
 
-  function handleSubmitBuildOrder(e: React.FormEvent) {
-    e.preventDefault
-    //so that the page doesnt refresh
-  }
+  async function handleSubmitBuildOrder(e: React.FormEvent) {
+        e.preventDefault();
+        await createBuildMutation.mutateAsync({
+            matchup: MatchUp,
+            build:buildOrder
+          })
+        //so that the page doesnt refresh
+      }
   
   return (
     <>
@@ -26,43 +30,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className=" gap-4 flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-        <h1>Submit a Build Order</h1>
-        <form className="flex flex-col gap-4" onSubmit={handleSubmitBuildOrder}>
-        <label htmlFor="match-up-select">
-          Matchup
-       </label>
-          <select
-            className="text-black"
-            value={MatchUp}
-            onChange={(e) => { setMatchUp(e.target.value) }}
-            id="match-up-select"
-            required
-          >
-          <option value="zvt">ZvT</option>
-          <option value="zvp">ZvP</option>
-          <option value="zvz">ZvZ</option>
-
-          <option value="pvt">PvT</option>
-          <option value="pvp">PvP</option>
-          <option value="pvz">PvZ</option>
-
-          <option value="tvt">TvT</option>
-          <option value="tvp">TvP</option>
-          <option value="tvz">TvZ</option>
-
-
-
-        </select>
-          <textarea
-            required
-            className="text-black p-2"
-            value={buildOrder}
-            onChange={(e) => setBuildOrder(e.target.value)}
-          />
-
-
-        <button className="bg-white p-2 text-black">submit</button>
-        </form>
+        <h1>Welcome to submit Build Order</h1>
+        <Link href="/submit-build">Submit  a new Build</Link>
+        <Link href="/builds">View Builds</Link>
       </main>
     </>
   );
